@@ -9,13 +9,14 @@ type Fbm struct {
 	octaves int
 }
 
-func (f *Fbm) Modulate(x float64, y float64, generator noise.Maker) float64 {
+func (f *Fbm) Modulate(x float64, y float64, maker noise.Maker) float64 {
 	res := 0.0
 	ampl := f.ampl
 	freq := f.freq
 
 	for octave := 0; octave < f.octaves; octave++ {
-		res += ampl * generator.Noise(freq*x, freq*y)
+		n := maker.Noise(freq*x, freq*y)
+		res += ampl * ((n + 1) / 2)
 
 		ampl *= 0.5
 		freq *= 2.0
@@ -24,7 +25,7 @@ func (f *Fbm) Modulate(x float64, y float64, generator noise.Maker) float64 {
 }
 
 func New(f ...ConfigFunc) *Fbm {
-	fbm := &Fbm{freq: 0.05, ampl: 1, octaves: 1}
+	fbm := &Fbm{freq: 0.005, ampl: 1, octaves: 1}
 	for _, f := range f {
 		f(fbm)
 	}

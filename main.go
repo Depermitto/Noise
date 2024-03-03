@@ -11,21 +11,23 @@ import (
 	"os"
 )
 
+const side = 2 << 9
+
 func main() {
 	var (
 		mod = fbm.New(
-			fbm.WithFreq(0.01),
+			fbm.WithAmpl(30),
+			fbm.WithOctaves(6),
+			fbm.WithFreq(0.0035),
 		)
-		//white  = noise.White{}
 		perlin = noise.Perlin{Interp: noise.Linear}
 	)
 
-	//encodeImage(Generator{white, nil}, "white.png")
 	encodeImage(Generator{perlin, mod}, "perlin.png")
 }
 
 func encodeImage(gen Generator, filename string) {
-	img := image.NewGray(image.Rect(0, 0, 400, 400))
+	img := image.NewGray(image.Rect(0, 0, side, side))
 	bounds := img.Bounds()
 	for x := 0; x < bounds.Dx(); x++ {
 		for y := 0; y < bounds.Dy(); y++ {
@@ -47,7 +49,7 @@ func encodeImage(gen Generator, filename string) {
 
 type Generator struct {
 	maker noise.Maker
-	fbm   *fbm.Fbm
+	fbm   fbm.Modulator
 }
 
 func (g Generator) Pix(x int, y int) uint8 {

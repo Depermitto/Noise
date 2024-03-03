@@ -21,18 +21,16 @@ func (p Perlin) Noise(x float64, y float64) float64 {
 
 	u, v := fade(xf), fade(yf)
 	return p.Interpolate(
-		v,
-		p.Interpolate(u, grad(aa, xf, yf), grad(ab, xf, yf-1)),
-		p.Interpolate(u, grad(ba, xf-1, yf), grad(bb, xf-1, yf-1)),
+		u,
+		p.Interpolate(v, grad(aa, xf, yf), grad(ab, xf, yf-1)),
+		p.Interpolate(v, grad(ba, xf-1, yf), grad(bb, xf-1, yf-1)),
 	)
 }
 
 func grad(hash int, x float64, y float64) float64 {
 	res := 0.0
-
 	res += float64(1-2*(hash&1)) * x
 	res += float64(1-2*(hash&2)>>1) * y
-
 	return res
 }
 
