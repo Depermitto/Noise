@@ -11,16 +11,12 @@ import (
 	"os"
 )
 
-const side = 2 << 9
+const side = 2 << 8
 
 func main() {
 	var (
-		mod = fbm.New(
-			fbm.WithAmpl(30),
-			fbm.WithOctaves(6),
-			fbm.WithFreq(0.0035),
-		)
-		perlin = noise.Perlin{Interp: noise.Linear}
+		mod    = fbm.New()
+		perlin = noise.NewPerlin(noise.Linear)
 	)
 
 	encodeImage(Generator{perlin, mod}, "perlin.png")
@@ -49,7 +45,7 @@ func encodeImage(gen Generator, filename string) {
 
 type Generator struct {
 	maker noise.Maker
-	fbm   fbm.Modulator
+	fbm   *fbm.Fbm
 }
 
 func (g Generator) Pix(x int, y int) uint8 {

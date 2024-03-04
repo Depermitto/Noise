@@ -1,22 +1,8 @@
 package noise
 
-import (
-	"math/rand"
-	"sync/atomic"
-)
-
-const PermTableCap = 256
-
-var perm = atomic.Value{}
-
-func P(i int) int {
-	if perm.Load() == nil {
-		wrapping := rand.Perm(PermTableCap)
-		perm.Store(append(wrapping, wrapping...))
-	}
-	return perm.Load().([]int)[i]
-}
-
+// Maker is standard interface for all structs being able to produce noise
+// based on given (x, y) coordinates.
 type Maker interface {
+	// Noise should return a value in range (0, 1).
 	Noise(x float64, y float64) float64
 }
