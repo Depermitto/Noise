@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Depermitto/noise/fbm"
 	"github.com/Depermitto/noise/noise"
+	"github.com/Depermitto/noise/noise/chaos"
 	"image"
 	"image/color"
 	"image/png"
@@ -14,11 +15,16 @@ import (
 const side = 2 << 8
 
 func main() {
+	chaos.SetSeed(6)
 	var (
-		mod    = fbm.New()
+		mod = fbm.New(
+			fbm.WithOctaves(4),
+			fbm.WithAmpl(1.2),
+		)
 		perlin = noise.NewPerlin(noise.Linear)
 	)
 
+	encodeImage(Generator{noise.White{}, nil}, "white.png")
 	encodeImage(Generator{perlin, mod}, "perlin.png")
 }
 

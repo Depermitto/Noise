@@ -28,7 +28,7 @@ func (p Perlin) Noise(x float64, y float64) float64 {
 		u,
 		p.Interpolate(v, grad(aa, xf, yf), grad(ab, xf, yf-1)),
 		p.Interpolate(v, grad(ba, xf-1, yf), grad(bb, xf-1, yf-1)),
-	)) / 2 // (1 + Interpolate) / 2 is for moving the range from (-1, 1) to (0, 1).
+	)) / 2 // moving the range from (-1, 1) to (0, 1).
 }
 
 func grad(hash int, x float64, y float64) float64 {

@@ -1,7 +1,7 @@
 package noise
 
 import (
-	"math/rand"
+	"github.com/Depermitto/noise/noise/chaos"
 	"sync/atomic"
 )
 
@@ -15,7 +15,7 @@ func P(i int) int {
 		return p.([]int)[i]
 	}
 
-	wrapping := rand.Perm(PermTableCap)
+	wrapping := chaos.Rand().Perm(PermTableCap)
 	p := append(wrapping, wrapping...)
 	perm.Store(p)
 	return p[i]
