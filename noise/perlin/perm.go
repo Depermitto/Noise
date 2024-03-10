@@ -1,4 +1,4 @@
-package noise
+package perlin
 
 import (
 	"github.com/Depermitto/noise/noise/chaos"

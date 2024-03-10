@@ -1,15 +1,16 @@
-package noise
+package perlin
 
 import (
+	"github.com/Depermitto/noise/noise"
 	"math"
 )
 
 type Perlin struct {
-	interp
+	noise.Interp
 }
 
-func NewPerlin(interpolation interp) Perlin {
-	return Perlin{interp: interpolation}
+func Make(interpolation noise.Interp) Perlin {
+	return Perlin{Interp: interpolation}
 }
 
 func (p Perlin) Noise(x float64, y float64) float64 {

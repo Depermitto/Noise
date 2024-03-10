@@ -1,13 +1,13 @@
 package noise
 
-type interp int
+type Interp int
 
 const (
-	Linear interp = iota
+	Linear Interp = iota
 	Cubic
 )
 
-func (i interp) Interpolate(t, a, b float64) float64 {
+func (i Interp) Interpolate(t, a, b float64) float64 {
 	switch i {
 	case Linear:
 		return a + t*(b-a)

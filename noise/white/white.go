@@ -1,4 +1,4 @@
-package noise
+package white
 
 import "github.com/Depermitto/noise/noise/chaos"
 

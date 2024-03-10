@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/Depermitto/noise/fbm"
 	"github.com/Depermitto/noise/noise"
-	"github.com/Depermitto/noise/noise/chaos"
+	"github.com/Depermitto/noise/noise/worley"
 	"image"
 	"image/color"
 	"image/png"
@@ -12,27 +12,23 @@ import (
 	"os"
 )
 
-const side = 2 << 8
+const side = 2 << 7
+
+var bounds = image.Rect(0, 0, side, side)
 
 func main() {
-	chaos.SetSeed(6)
-	var (
-		mod = fbm.New(
-			fbm.WithOctaves(4),
-			fbm.WithAmpl(1.2),
-		)
-		perlin = noise.NewPerlin(noise.Linear)
-	)
+	//chaos.SetSeed(6)
+	wor := worley.Make(8, bounds)
 
-	encodeImage(Generator{noise.White{}, nil}, "white.png")
-	encodeImage(Generator{perlin, mod}, "perlin.png")
+	encodeImage(Generator{wor, nil}, "worley.png")
+	//encodeImage(Generator{perl, mod}, "perl.png")
 }
 
 func encodeImage(gen Generator, filename string) {
-	img := image.NewGray(image.Rect(0, 0, side, side))
+	img := image.NewGray(bounds)
 	bounds := img.Bounds()
-	for x := 0; x < bounds.Dx(); x++ {
-		for y := 0; y < bounds.Dy(); y++ {
+	for x := range bounds.Dx() {
+		for y := range bounds.Dy() {
 			intensity := gen.Pix(x, y)
 			img.SetGray(x, y, color.Gray{Y: intensity})
 		}
