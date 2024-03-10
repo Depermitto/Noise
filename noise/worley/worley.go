@@ -2,46 +2,49 @@ package worley
 
 import (
 	"github.com/Depermitto/noise/noise/chaos"
-	"image"
 	"math"
 	"slices"
 )
 
 type Worley struct {
-	Cells    map[coords]coords
-	cellSize float64
+	cells map[coords]coords
+	tri   bool
 }
 
-func Make(cellSize int, bounds image.Rectangle) Worley {
-	cells := make(map[coords]coords)
-	for x := 0; x < bounds.Dx(); x += cellSize {
-		for y := 0; y < bounds.Dy(); y += cellSize {
-			cells[coord(x, y)] = coord(
-				chaos.Rand().IntN(cellSize)+x,
-				chaos.Rand().IntN(cellSize)+y,
-			)
-		}
+func Make(tri bool) Worley {
+	return Worley{
+		cells: make(map[coords]coords),
+		tri:   tri,
 	}
-	return Worley{cellSize: float64(cellSize), Cells: cells}
 }
 
 func (w Worley) Noise(x float64, y float64) float64 {
 	cur := coord(x, y)
 
 	var dist []float64
-	for _, i := range []float64{-1, 0, 1} {
-		for _, j := range []float64{-1, 0, 1} {
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
 			neighbour := coord(
-				math.Floor((x+i*w.cellSize)/w.cellSize)*w.cellSize,
-				math.Floor((y+j*w.cellSize)/w.cellSize)*w.cellSize,
+				math.Floor(x)+float64(i),
+				math.Floor(y)+float64(j),
 			)
 
-			feat, ok := w.Cells[neighbour]
-			if ok {
-				dist = append(dist, cur.euclidSquared(feat))
+			feat, ok := w.cells[neighbour]
+			if !ok {
+				w.cells[neighbour] = coord(
+					chaos.Rand().Float64()+neighbour.x(),
+					chaos.Rand().Float64()+neighbour.y(),
+				)
 			}
+			dist = append(dist, cur.euclidSquared(feat))
 		}
 	}
-	slices.Sort(dist)
-	return math.Sqrt(dist[0])
+
+	if w.tri {
+		slices.Sort(dist)
+		return min(math.Sqrt(dist[1])-math.Sqrt(dist[0]), 1)
+	}
+
+	minDist := slices.Min(dist)
+	return min(math.Sqrt(minDist), 1)
 }

@@ -22,7 +22,7 @@ func (f *Fbm) Modulate(x float64, y float64, maker noise.Maker) float64 {
 		ampl *= f.persistence
 		freq *= f.lacunarity
 	}
-	return res
+	return min(res, 1)
 }
 
 // New constructs a new *Fbm, setting parameters to reasonable default values:

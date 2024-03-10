@@ -19,10 +19,14 @@ var bounds = image.Rect(0, 0, side, side)
 
 func main() {
 	chaos.SetSeed(6)
-	wor := worley.Make(2<<5, bounds)
+	wor := worley.Make(true)
+	//perl := perlin.Make(noise.Linear)
+	mod := fbm.New(
+		fbm.WithFreq(0.010),
+	)
 
-	encodeImage(Generator{wor, nil}, "worley.png")
-	//encodeImage(Generator{perl, mod}, "perl.png")
+	//encodeImage(Generator{perl, mod}, "perlin.png")
+	encodeImage(Generator{wor, mod}, "worley.png")
 }
 
 func encodeImage(gen Generator, filename string) {
