@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Depermitto/noise/fbm"
 	"github.com/Depermitto/noise/noise"
+	"github.com/Depermitto/noise/noise/chaos"
 	"github.com/Depermitto/noise/noise/worley"
 	"image"
 	"image/color"
@@ -12,13 +13,13 @@ import (
 	"os"
 )
 
-const side = 2 << 7
+const side = 2 << 8
 
 var bounds = image.Rect(0, 0, side, side)
 
 func main() {
-	//chaos.SetSeed(6)
-	wor := worley.Make(8, bounds)
+	chaos.SetSeed(6)
+	wor := worley.Make(2<<5, bounds)
 
 	encodeImage(Generator{wor, nil}, "worley.png")
 	//encodeImage(Generator{perl, mod}, "perl.png")
