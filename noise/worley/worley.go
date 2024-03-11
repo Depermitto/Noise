@@ -30,6 +30,10 @@ func (w Worley) Noise(x float64, y float64) float64 {
 				y+float64(j),
 			)
 
+			if neighbour.x < 0 || neighbour.y < 0 {
+				continue
+			}
+
 			feat, ok := w.Cells[neighbour]
 			if !ok {
 				w.Cells[neighbour] = coord(
