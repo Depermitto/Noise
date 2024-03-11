@@ -7,40 +7,41 @@ import (
 )
 
 type Worley struct {
-	cells map[coords]coords
-	tri   bool
+	Cells map[coords]coords
+	tes   bool
 }
 
-func Make(tri bool) Worley {
+func Make(tes bool) Worley {
 	return Worley{
-		cells: make(map[coords]coords),
-		tri:   tri,
+		Cells: make(map[coords]coords),
+		tes:   tes,
 	}
 }
 
 func (w Worley) Noise(x float64, y float64) float64 {
 	cur := coord(x, y)
+	x, y = math.Floor(x), math.Floor(y)
 
-	var dist []float64
+	dist := make([]float64, 0, 9)
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
 			neighbour := coord(
-				math.Floor(x)+float64(i),
-				math.Floor(y)+float64(j),
+				x+float64(i),
+				y+float64(j),
 			)
 
-			feat, ok := w.cells[neighbour]
+			feat, ok := w.Cells[neighbour]
 			if !ok {
-				w.cells[neighbour] = coord(
-					chaos.Rand().Float64()+neighbour.x(),
-					chaos.Rand().Float64()+neighbour.y(),
+				w.Cells[neighbour] = coord(
+					chaos.Rand().Float64()+neighbour.x,
+					chaos.Rand().Float64()+neighbour.y,
 				)
 			}
 			dist = append(dist, cur.euclidSquared(feat))
 		}
 	}
 
-	if w.tri {
+	if w.tes {
 		slices.Sort(dist)
 		return min(math.Sqrt(dist[1])-math.Sqrt(dist[0]), 1)
 	}

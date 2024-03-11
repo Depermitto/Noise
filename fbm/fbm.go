@@ -11,7 +11,7 @@ type Fbm struct {
 	octaves int
 }
 
-func (f *Fbm) Modulate(x float64, y float64, maker noise.Maker) float64 {
+func (f *Fbm) Modulate(maker noise.Maker, x float64, y float64) float64 {
 	res := 0.0
 	ampl := f.ampl
 	freq := f.freq
